@@ -108,6 +108,11 @@ function init() {
 		this.bevelEnabled = true;
 		this.curveSegments = 12;
 		
+		this.positionX = 4;
+		this.positionY = 36;
+		this.positionZ = 0;
+		this.rotationSpeed = 0.005;
+		
 		this.asGeom = function () {
 			var options = {
 				amount: controls.amount,
@@ -116,7 +121,6 @@ function init() {
 				bevelSegments: controls.bevelSegments,
 				bevelEnabled: controls.bevelEnabled,
 				curveSegments: controls.curveSegments,
-				
 			};
 			
 			var svgString = document.querySelector("#batman-path").getAttribute("d");
@@ -125,7 +129,7 @@ function init() {
 			svgGeom.applyMatrix(new THREE.Matrix4().makeTranslation(-390, -74, 0)); // allow the rotation on its own axis
 			var meshMaterial = new THREE.MeshPhongMaterial({color: 0x333333, shininess: 100, metal: true});
 			batSignal = new THREE.Mesh(svgGeom, meshMaterial);
-			batSignal.position.set(4, 36, 0); // center it
+			batSignal.position.set(controls.positionX, controls.positionY, controls.positionZ); // center it
 			batSignal.scale.x = 0.1;
 			batSignal.scale.y = 0.1;
 			batSignal.rotation.z = Math.PI;
@@ -136,6 +140,23 @@ function init() {
 	
 	var gui = new dat.GUI();
 	gui.add(controls, 'visibleAxis');
+	gui.add(controls, 'rotationSpeed', 0, 0.1);
+	guiPosition = gui.addFolder('position');
+	var contX = guiPosition.add(controls, 'positionX', -10, 10);
+	var contY = guiPosition.add(controls, 'positionY', 36, 56);
+	var contZ = guiPosition.add(controls, 'positionZ', -10, 10);
+	contX.listen();
+	contX.onChange(function (value) {
+		batSignal.position.x = controls.positionX;
+	});
+	contY.listen();
+	contY.onChange(function (value) {
+		batSignal.position.y = controls.positionY;
+	});
+	contZ.listen();
+	contZ.onChange(function (value) {
+		batSignal.position.z = controls.positionZ;
+	});
 	guiBevel = gui.addFolder('bevel');
 	guiBevel.add(controls, 'amount', 0, 20).onChange(controls.asGeom);
 	guiBevel.add(controls, 'bevelThickness', 0, 10).onChange(controls.asGeom);
@@ -180,7 +201,7 @@ function init() {
 		
 		if(batSignal)
 		{
-			batSignal.rotation.y += 0.005;
+			batSignal.rotation.y += controls.rotationSpeed;
 		}
 		
 		requestAnimationFrame(render);
