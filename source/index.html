@@ -100,7 +100,7 @@ function init() {
 	var batSignal;
 	 var controls = new function () {
 		this.visibleAxis = false;
-		this.amount = 2;
+		this.amount = 1;
 		this.bevelThickness = 2;
 		this.bevelSize = 0.5;
 		this.bevelEnabled = true;
@@ -157,13 +157,6 @@ function init() {
 	contZ.onChange(function (value) {
 		batSignal.position.z = controls.positionZ;
 	});
-	guiBevel = gui.addFolder('bevel');
-	guiBevel.add(controls, 'amount', 0, 20).onChange(controls.asGeom);
-	guiBevel.add(controls, 'bevelThickness', 0, 10).onChange(controls.asGeom);
-	guiBevel.add(controls, 'bevelSize', 0, 10).onChange(controls.asGeom);
-	guiBevel.add(controls, 'bevelSegments', 0, 30).step(1).onChange(controls.asGeom);
-	guiBevel.add(controls, 'bevelEnabled').onChange(controls.asGeom);
-	guiBevel.add(controls, 'curveSegments', 1, 30).step(1).onChange(controls.asGeom);
 	
 	controls.asGeom();
 	
